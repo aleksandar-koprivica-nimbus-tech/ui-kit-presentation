@@ -1,40 +1,315 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
-	<head>
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
 
-		<title>reveal.js</title>
+    <title>reveal.js</title>
 
-		<link rel="stylesheet" href="dist/reset.css">
-		<link rel="stylesheet" href="dist/reveal.css">
-		<link rel="stylesheet" href="dist/theme/black.css">
+    <link rel="stylesheet" href="dist/reset.css" />
+    <link rel="stylesheet" href="dist/reveal.css" />
+    <link rel="stylesheet" href="dist/theme/black.css" />
 
-		<!-- Theme used for syntax highlighted code -->
-		<link rel="stylesheet" href="plugin/highlight/monokai.css">
-	</head>
-	<body>
-		<div class="reveal">
-			<div class="slides">
-				<section>Slide 1</section>
-				<section>Slide 2</section>
-			</div>
-		</div>
+    <!-- Theme used for syntax highlighted code -->
+    <link rel="stylesheet" href="plugin/highlight/monokai.css" />
+  </head>
+  <body>
+    <div class="reveal">
+      <div class="footer">
+        <img alt="logo" src="examples/assets/logo.png" width="200px" />
+      </div>
+      <div class="slides">
+        <section>
+          <h1>UI KIT LIBRARY</h1>
+          <p>8.7.2022.</p>
+        </section>
+        <section>
+          <section><h1>Idea</h1></section>
+          <section>Why we need custom UI kit?</section>
+          <section>
+            <p>- duplicate code</p>
+            <p>- easy maintain</p>
+            <p>- sharing across the projects</p>
+          </section>
+          <section>What we are going to create?</section>
+          <section>
+            UI Library based on the presentational components with certain
+            interactions
+            <button
+              style="
+                position: absolute;
+                bottom: -200px;
+                left: calc(50% - 50px);
+                width: 100px;
+                height: 50px;
+              "
+            >
+              Hello
+            </button>
+          </section>
+          <section>Development experience!</section>
+          <section>Well prepared design!</section>
+        </section>
+        <section>
+          <section><h1>Design</h1></section>
+          <section>
+            <img alt="colors" width="30%" src="/img/colors.png" />
+          </section>
+          <section>
+            <img alt="typography" width="30%" src="/img/typography.png" />
+          </section>
+          <section>
+            <img alt="components" width="30%" src="/img/components.png" />
+          </section>
+        </section>
+        <section>
+          <section><h1>Project setup</h1></section>
+          <section><p>Let's take a look at the project structure</p></section>
+          <section>
+            eslint <br />
+            husky <br />
+            prettier <br />
+            jest <br />
+            storybook <br />
+          </section>
+          <section>
+            CSS needs to react to props
+            <br />
+            Styled components is the easiest solution
+          </section>
+        </section>
+        <section>
+          <section>
+            <h1>Rollup bundler</h1>
+            <p>next-generation JavaScript module bundler</p>
+          </section>
+          <section>
+            “Rollup is a module bundler for JavaScript which compiles small
+            pieces of code into something larger and more complex, such as a
+            library or application.”
+          </section>
+          <section>easy and quick setup</section>
+          <section>
+            small - because it's based on ES modules (more efficient than
+            CommonJS modules)
+          </section>
+          <section>removes unused code from the produced bundle</section>
+          <section>tree-shaking removes unused functions</section>
+          <section>
+            the source can be linted, prettified, and syntax-checked during
+            bundling
+          </section>
+          <section>
+            production bundles can be minified and have logging removed
+          </section>
+          <section>
+            multiple output files - for example, your library could be provided
+            in ES5, ES6 modules, and Node.js-compatible CommonJS
+          </section>
+          <section>
+            <pre><code data-line-numbers="4 |5 | 17 |25">
+              export default [
+              {
+                input: "src/index.ts",
+                output: [
+                  {
+                    file: packageJson.main,
+                    format: "cjs",
+                    sourcemap: true,
+                  },
+                  {
+                    file: packageJson.module,
+                    format: "esm",
+                    sourcemap: true,
+                  },
+                ],
+                plugins: [
+                  peerDepsExternal(),
+                  resolve(),
+                  commonjs(),
+                  typescript({
+                    tsconfig: "./tsconfig.json"
+                  }),
+                  terser(),
+                  css({ output: "index.css" }),
+                ],
+                external: ["react", "react-dom"],
+              },
+              {
+                input: "dist/esm/types/index.d.ts",
+                output:
+                  [{
+                    file: "dist/index.d.ts",
+                    format: "esm"
+                  }],
+                plugins: [dts()],
+                external: [/\.(css|less|scss)$/],
+              },
+              ];</code></pre>
+          </section>
+        </section>
+        <section>
+          <section><h1>Circle Ci</h1></section>
+          <section>continuous integration & delivery platform</section>
+          <section>
+            add a repository<br />
+            setup circleCi config <br />
+            code changes trigger CircleCI to run jobs <br />
+            CircleCI sends an email
+          </section>
+          <section>
+            <pre><code data-line-numbers="2 | 3 | 4 | 7 | 25 | 26 | 27 | 29 ">
+version: 2.1
+jobs:
+  release:
+    docker:
+      - image: "circleci/node:latest"
+    steps:
+      - checkout
+      - run:
+          name: install
+          command: yarn
+      - run:
+          name: build
+          command: yarn build
+      - run:
+          name: test
+          command: yarn test
+      - run:
+          name: lint
+          command: yarn eslint
+      - run:
+          name: release
+          command: yarn semantic-release || true
 
-		<script src="dist/reveal.js"></script>
-		<script src="plugin/notes/notes.js"></script>
-		<script src="plugin/markdown/markdown.js"></script>
-		<script src="plugin/highlight/highlight.js"></script>
-		<script>
-			// More info about initialization & config:
-			// - https://revealjs.com/initialization/
-			// - https://revealjs.com/config/
-			Reveal.initialize({
-				hash: true,
+workflows:
+  publish-workflow:
+    jobs:
+      - release:
+          filters:
+            branches:
+              only:
+                - main
 
-				// Learn about plugins: https://revealjs.com/plugins/
-				plugins: [ RevealMarkdown, RevealHighlight, RevealNotes ]
-			});
-		</script>
-	</body>
+          </code></pre>
+          </section>
+        </section>
+        <section>
+          <section><h1>Deploy to NPM</h1></section>
+          <section>How to deploy your package? 🧐</section>
+          <section>
+            Create your package. <br />
+            Publish the package. <br />
+            🥲
+          </section>
+          <section>
+            create NPM account <br />
+            <pre><code>npm login </code></pre>
+            ...
+            <pre><code>npm publish </code></pre>
+          </section>
+        </section>
+        <section>
+          <section><h1>Semantic-release</h1></section>
+          <section>
+            Fully automated version management and package publishing
+          </section>
+          <section>human versioning VS automated versioning 🥊</section>
+          <section>
+            uses the commit messages to determine the consumer impact of changes
+            in the codebase
+          </section>
+          <section>
+            <pre><code data-line-numbers="1 | 4 ">
+    "scripts": {
+      "test": "jest",
+      "semantic-release": "semantic-release --branches main",
+      "build": "rollup -c",
+      "storybook": "start-storybook -p 6006",
+      "build-storybook": "build-storybook",
+      "commit": "git add . && cz",
+      "eslint": "eslint --fix",
+      "prepare": "husky install"
+    },
+            </code></pre>
+          </section>
+          <section>Commit message convention</section>
+          <section><img src="img/commit-message.png" alt="cm" /></section>
+          <section>commitizeen</section>
+          <section><img src="img/commitizeen.png" alt="commitizeen" /></section>
+        </section>
+
+        <section>
+          <section><h1>Storybook</h1></section>
+          <section>Test</section>
+          <section>Display what we did</section>
+          <section>Create documentation</section>
+          <section>Let's take a look at the code 💻</section>
+        </section>
+        <section>
+          <section><h1>Components</h1></section>
+          <section>How to create a component?</section>
+          <section>
+            <img src="img/create-component.png" alt="create-component" />
+          </section>
+          <section>DEMO ⌨️</section>
+        </section>
+        <section>
+          <section><h1>How to use?</h1></section>
+          <section>
+            <pre><code>yarn add package_name</code></pre>
+          </section>
+          <section>
+            <pre><code>npm install package_name</code></pre>
+          </section>
+        </section>
+        <section>
+          <section><h1>Template</h1></section>
+          <section><img src="img/template.png" /></section>
+          <section>How we can use the template?</section>
+          <section>
+            - bootstrap a new repo from this template <br>
+            - update all package.json with new project name <br>
+            - Setup CircleCi with existing `config.yaml` <br>
+            - Add env
+          </section>
+        </section>
+        <section>
+          <section><h1>Summary</h1></section>
+          <section>
+            It kept the code clean <br>
+            Design and development team should think more about uniformity and
+            usability <br>
+            Make the future development easier
+          </section>
+        </section>
+        <section>
+          <section>
+            <h1>Thank you!</h1>
+            <p>Questions?</p>
+          </section>
+        </section>
+      </div>
+    </div>
+
+    <script src="dist/reveal.js"></script>
+    <script src="plugin/notes/notes.js"></script>
+    <script src="plugin/markdown/markdown.js"></script>
+    <script src="plugin/highlight/highlight.js"></script>
+    <script>
+      // More info about initialization & config:
+      // - https://revealjs.com/initialization/
+      // - https://revealjs.com/config/
+      Reveal.initialize({
+        hash: true,
+        slideNumber: true,
+        logo: true,
+        // Learn about plugins: https://revealjs.com/plugins/
+        plugins: [RevealMarkdown, RevealHighlight, RevealNotes],
+      });
+    </script>
+  </body>
 </html>
